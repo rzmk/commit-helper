@@ -11,6 +11,8 @@ fn main() {
     if dry_run {
         println!("Running in dry run mode\n");
     }
+    // Check if --debug flag is passed to run in debug mode
+    let debug = args.len() > 1 && args.contains(&String::from("--debug"));
 
     // Commit Type
     let commit_type_options = vec![
@@ -46,19 +48,33 @@ fn main() {
             if run_git_add == true {
                 println!("Running git add -A");
                 if !dry_run {
-                    Command::new("git")
+                    let output = Command::new("git")
                         .args(["add", "-A"])
                         .output()
                         .expect("failed to execute process");
+
+                    if debug {
+                        println!("Debug info:");
+                        println!("stdout:\n{}", String::from_utf8_lossy(&output.stdout));
+                        println!("stderr:\n{}", String::from_utf8_lossy(&output.stderr));
+                        println!("Exit status:\n{}", output.status);
+                    }
                 }
             }
 
             println!("Running git commit -m \"{}\"", result_message);
             if dry_run == false {
-                Command::new("git")
+                let output = Command::new("git")
                     .args(["commit", "-m", result_message.as_str()])
                     .output()
                     .expect("failed to execute process");
+
+                if debug {
+                    println!("Debug info:");
+                    println!("stdout:\n{}", String::from_utf8_lossy(&output.stdout));
+                    println!("stderr:\n{}", String::from_utf8_lossy(&output.stderr));
+                    println!("Exit status:\n{}", output.status);
+                }
             }
         }
         _ => {
