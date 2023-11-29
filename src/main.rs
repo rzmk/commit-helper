@@ -14,7 +14,7 @@ fn main() {
 
     // Commit Type
     let commit_type_options = vec![
-        "build", "ci", "docs", "feat", "fix", "perf", "refactor", "test",
+        "build", "ci", "chore", "docs", "feat", "fix", "perf", "refactor", "test",
     ];
     let commit_type = Select::new("Type:", commit_type_options).prompt();
     let commit_type = match commit_type {
@@ -43,7 +43,7 @@ fn main() {
 
     match confirm {
         Ok(true) => {
-            if run_git_add {
+            if run_git_add == true {
                 println!("Running git add -A");
                 if !dry_run {
                     Command::new("git")
@@ -54,7 +54,7 @@ fn main() {
             }
 
             println!("Running git commit -m \"{}\"", result_message);
-            if !dry_run {
+            if dry_run == false {
                 Command::new("git")
                     .args(["commit", "-m", result_message.as_str()])
                     .output()
