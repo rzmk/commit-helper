@@ -30,7 +30,7 @@ ch -a
 
 ### `--dry-run` or `-d`
 
-If you want to do a dry run without actually adding or committing, use the `ch -d` or `ch --dry-run` flag.
+If you want to do a dry run without actually adding or committing, use the `-d` or `--dry-run` flag.
 
 ```bash
 ch -d
@@ -38,7 +38,7 @@ ch -d
 
 ### `--debug`
 
-If you want to see the debug output, use the `ch --debug` flag.
+If you want to see the debug output, use the `--debug` flag.
 
 ```bash
 ch --debug
