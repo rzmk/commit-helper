@@ -16,11 +16,24 @@ fn main() {
 
     // Commit Type
     let commit_type_options = vec![
-        "build", "ci", "chore", "docs", "feat", "fix", "perf", "refactor", "test",
+        "build - build system and dependencies",
+        "ci - continuous integration",
+        "chore - misc/maintenance not related to core code",
+        "docs - documentation changes (e.g., README.md, comments)",
+        "feat - new feature or significant enhancement",
+        "fix - bug fix or error correction",
+        "perf - performance improvement",
+        "refactor - code restructuring or cleanup",
+        "test - add or update tests",
     ];
     let commit_type = Select::new("Type:", commit_type_options).prompt();
     let commit_type = match commit_type {
-        Ok(commit_type) => String::from(commit_type),
+        Ok(commit_type) =>
+        // Get the first word of the commit type
+        {
+            let commit_type = commit_type.split_whitespace().next().unwrap();
+            commit_type
+        }
         Err(_) => {
             println!("No commit type selected, exiting");
             return;
@@ -45,7 +58,7 @@ fn main() {
 
     match confirm {
         Ok(true) => {
-            if run_git_add == true {
+            if run_git_add {
                 println!("Running git add -A");
                 if !dry_run {
                     let output = Command::new("git")
@@ -63,7 +76,7 @@ fn main() {
             }
 
             println!("Running git commit -m \"{}\"", result_message);
-            if dry_run == false {
+            if !dry_run {
                 let output = Command::new("git")
                     .args(["commit", "-m", result_message.as_str()])
                     .output()
