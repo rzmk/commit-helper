@@ -14,7 +14,7 @@ cargo install --git https://github.com/rzmk/commit-helper
 
 ## Usage
 
-To run the tool, simply run `ch` in your terminal.
+To run the tool, simply run `ch` in your terminal:
 
 ```bash
 ch
@@ -22,7 +22,7 @@ ch
 
 ### `-a`
 
-If you want to run `git add -A` before committing, use the `-a` flag
+If you want to run `git add -A` before committing, use the `-a` flag:
 
 ```bash
 ch -a
@@ -30,7 +30,7 @@ ch -a
 
 ### `-p`
 
-If you want to run `git push` after committing, use the `-p` flag
+If you want to run `git push` after committing, use the `-p` flag:
 
 ```bash
 ch -p
@@ -38,15 +38,15 @@ ch -p
 
 ### `--dry-run` or `-d`
 
-If you want to do a dry run without actually adding or committing, use the `-d` or `--dry-run` flag.
+If you want to do a dry run without actually adding or committing, use the `-d` or `--dry-run` flag:
 
 ```bash
-ch -d
+ch --dry-run
 ```
 
 ### `--debug`
 
-If you want to see the debug output, use the `--debug` flag.
+If you want to see the debug output, use the `--debug` flag:
 
 ```bash
 ch --debug
