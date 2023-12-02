@@ -11,6 +11,8 @@ fn main() {
     if dry_run {
         println!("Running in dry run mode\n");
     }
+    // Check if -p flag is passed to run git push after commit
+    let run_git_push = args.len() > 1 && args.contains(&String::from("-p"));
     // Check if --debug flag is passed to run in debug mode
     let debug = args.len() > 1 && args.contains(&String::from("--debug"));
 
@@ -87,6 +89,23 @@ fn main() {
                     println!("stdout:\n{}", String::from_utf8_lossy(&output.stdout));
                     println!("stderr:\n{}", String::from_utf8_lossy(&output.stderr));
                     println!("Exit status:\n{}", output.status);
+                }
+            }
+
+            if run_git_push {
+                println!("Running git push");
+                if !dry_run {
+                    let output = Command::new("git")
+                        .args(["push"])
+                        .output()
+                        .expect("failed to execute process");
+
+                    if debug {
+                        println!("Debug info:");
+                        println!("stdout:\n{}", String::from_utf8_lossy(&output.stdout));
+                        println!("stderr:\n{}", String::from_utf8_lossy(&output.stderr));
+                        println!("Exit status:\n{}", output.status);
+                    }
                 }
             }
         }

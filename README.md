@@ -28,6 +28,14 @@ If you want to run `git add -A` before committing, use the `-a` flag
 ch -a
 ```
 
+### `-p`
+
+If you want to run `git push` after committing, use the `-p` flag
+
+```bash
+ch -p
+```
+
 ### `--dry-run` or `-d`
 
 If you want to do a dry run without actually adding or committing, use the `-d` or `--dry-run` flag.
