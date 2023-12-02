@@ -1,6 +1,13 @@
 use inquire::{Confirm, Select};
 use std::{env, process::Command};
 
+fn print_debug_info(output: std::process::Output) {
+    println!("Debug info:");
+    println!("stdout:\n{}", String::from_utf8_lossy(&output.stdout));
+    println!("stderr:\n{}", String::from_utf8_lossy(&output.stderr));
+    println!("Exit status:\n{}", output.status);
+}
+
 fn main() {
     // Check if -a flag is passed to run git add -A before commit
     let args: Vec<String> = env::args().collect();
@@ -69,10 +76,7 @@ fn main() {
                         .expect("failed to execute process");
 
                     if debug {
-                        println!("Debug info:");
-                        println!("stdout:\n{}", String::from_utf8_lossy(&output.stdout));
-                        println!("stderr:\n{}", String::from_utf8_lossy(&output.stderr));
-                        println!("Exit status:\n{}", output.status);
+                        print_debug_info(output);
                     }
                 }
             }
@@ -85,10 +89,7 @@ fn main() {
                     .expect("failed to execute process");
 
                 if debug {
-                    println!("Debug info:");
-                    println!("stdout:\n{}", String::from_utf8_lossy(&output.stdout));
-                    println!("stderr:\n{}", String::from_utf8_lossy(&output.stderr));
-                    println!("Exit status:\n{}", output.status);
+                    print_debug_info(output);
                 }
             }
 
@@ -101,10 +102,7 @@ fn main() {
                         .expect("failed to execute process");
 
                     if debug {
-                        println!("Debug info:");
-                        println!("stdout:\n{}", String::from_utf8_lossy(&output.stdout));
-                        println!("stderr:\n{}", String::from_utf8_lossy(&output.stderr));
-                        println!("Exit status:\n{}", output.status);
+                        print_debug_info(output);
                     }
                 }
             }
