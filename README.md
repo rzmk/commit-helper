@@ -4,6 +4,8 @@ A simple tool to help write commit messages and run git commands.
 
 ![Demo](demo.gif)
 
+You may read a brief post about commit-helper on my website: [mueezkhan.com/memos/commit-helper](https://www.mueezkhan.com/memos/commit-helper)
+
 ## Installation
 
 Make sure you have [Cargo](https://doc.rust-lang.org/cargo/getting-started/installation.html) installed, then run the following command in your terminal:
