@@ -14,7 +14,7 @@ cargo install --git https://github.com/rzmk/commit-helper
 
 ## Reference
 
-To run the interactive workflow, simply run `ch` in your terminal:
+To run the interactive workflow, run `ch` in your terminal:
 
 ```bash
 ch
