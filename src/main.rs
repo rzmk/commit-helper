@@ -1,55 +1,53 @@
-use inquire::{Confirm, Select};
-use std::{env, process::Command};
+use clap::Parser;
+use inquire::{formatter::OptionFormatter, Confirm, InquireError, Select};
 
-fn print_debug_info(output: std::process::Output) {
-    println!("Debug info:");
-    println!("stdout:\n{}", String::from_utf8_lossy(&output.stdout));
-    println!("stderr:\n{}", String::from_utf8_lossy(&output.stderr));
-    println!("Exit status:\n{}", output.status);
-}
+pub mod parser;
+use parser::{Cli, CommitType};
+pub mod util;
+use util::orchestrate_commit;
 
 fn main() {
-    // Check if -a flag is passed to run git add -A before commit
-    let args: Vec<String> = env::args().collect();
-    let run_git_add = args.len() > 1 && args.contains(&String::from("-a"));
-    // Check if -d or --dry-run flag is passed to run in dry run mode
-    let dry_run = args.len() > 1
-        && (args.contains(&String::from("-d")) || args.contains(&String::from("--dry-run")));
-    if dry_run {
-        println!("Running in dry run mode\n");
-    }
-    // Check if -p flag is passed to run git push after commit
-    let run_git_push = args.len() > 1 && args.contains(&String::from("-p"));
-    // Check if --debug flag is passed to run in debug mode
-    let debug = args.len() > 1 && args.contains(&String::from("--debug"));
+    // Parse command line arguments
+    let cli: Cli = Cli::parse();
 
-    // Commit Type
+    // If a message was provided, run the commands in succession
+    if let Some(message) = &cli.message {
+        orchestrate_commit(&cli, &message);
+        return;
+    }
+
+    // Otherwise, prompt for a message
     let commit_type_options = vec![
-        "build - build system and dependencies",
-        "ci - continuous integration",
-        "chore - misc/maintenance not related to core code",
-        "docs - documentation changes (e.g., README.md, comments)",
-        "feat - new feature or significant enhancement",
-        "fix - bug fix or error correction",
-        "perf - performance improvement",
-        "refactor - code restructuring or cleanup",
-        "test - add or update tests",
+        CommitType::new("build", "build system and dependencies"),
+        CommitType::new("ci", "continuous integration"),
+        CommitType::new("chore", "misc/maintenance not related to core code"),
+        CommitType::new("docs", "documentation changes (e.g., README.md, comments)"),
+        CommitType::new("feat", "new feature or significant enhancement"),
+        CommitType::new("fix", "bug fix or error correction"),
+        CommitType::new("perf", "performance improvement"),
+        CommitType::new("refactor", "code restructuring or cleanup"),
+        CommitType::new("test", "add or update tests"),
     ];
-    let commit_type = Select::new("Type:", commit_type_options).prompt();
-    let commit_type = match commit_type {
-        Ok(commit_type) =>
-        // Get the first word of the commit type
-        {
-            let commit_type = commit_type.split_whitespace().next().unwrap();
-            commit_type
-        }
-        Err(_) => {
-            println!("No commit type selected, exiting");
+
+    // Format the commit type options for display
+    let formatter: OptionFormatter<CommitType> =
+        &|ct| format!("{}: {}", ct.value.name, ct.value.description);
+
+    // Prompt for the commit type
+    let selected_type: Result<CommitType, InquireError> = Select::new("Type:", commit_type_options)
+        .with_formatter(formatter)
+        .prompt();
+
+    // Get the name of the selected commit type
+    let commit_type = match selected_type {
+        Ok(ct) => ct.name,
+        Err(e) => {
+            println!("Error: {:?}", e);
             return;
         }
     };
 
-    // Summary
+    // Prompt for the commit summary (the message after the commit type)
     let commit_summary = inquire::Text::new("Summary:").prompt();
     let commit_summary = match commit_summary {
         Ok(commit_summary) => commit_summary,
@@ -59,59 +57,21 @@ fn main() {
         }
     };
 
+    // Format the commit message to include the commit type and summary
     let result_message = format!("{}: {}", commit_type, commit_summary);
 
-    // Confirm
+    // Confirm the commit message
     let confirm =
-        Confirm::new(format!("Result:\n\n{}\n\nCommit? (y/n):", result_message,).as_str()).prompt();
+        Confirm::new(format!("Result:\n\n{}\n\nCommit? (y/n):", result_message).as_str()).prompt();
 
+    // If confirmed, run the commands in succession
     match confirm {
         Ok(true) => {
-            if run_git_add {
-                println!("Running git add -A");
-                if !dry_run {
-                    let output = Command::new("git")
-                        .args(["add", "-A"])
-                        .output()
-                        .expect("failed to execute process");
-
-                    if debug {
-                        print_debug_info(output);
-                    }
-                }
-            }
-
-            println!("Running git commit -m \"{}\"", result_message);
-            if !dry_run {
-                let output = Command::new("git")
-                    .args(["commit", "-m", result_message.as_str()])
-                    .output()
-                    .expect("failed to execute process");
-
-                if debug {
-                    print_debug_info(output);
-                }
-            }
-
-            if run_git_push {
-                println!("Running git push");
-                if !dry_run {
-                    let output = Command::new("git")
-                        .args(["push"])
-                        .output()
-                        .expect("failed to execute process");
-
-                    if debug {
-                        print_debug_info(output);
-                    }
-                }
-            }
+            orchestrate_commit(&cli, &result_message);
         }
         _ => {
             println!("Exiting");
             return;
         }
     }
-
-    println!("Done 🎉");
 }

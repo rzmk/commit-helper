@@ -1,6 +1,6 @@
 [package]
 name = "commit-helper"
-version = "0.1.4"
+version = "0.2.0"
 edition = "2021"
 
 [[bin]]
@@ -8,4 +8,5 @@ name = "ch"
 path = "src/main.rs"
 
 [dependencies]
+clap = { version = "4.4.12", features = ["derive"] }
 inquire = { version = "0.6.2" }
