@@ -1,6 +1,6 @@
 # commit-helper (ch)
 
-A simple tool to help run commands related to `git commit` in one go.
+A command-line tool to help run commands related to `git commit` in one go.
 
 ![Demo](demo.gif)
 
