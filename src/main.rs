@@ -12,7 +12,7 @@ fn main() {
 
     // If a message was provided, run the commands in succession
     if let Some(message) = &cli.message {
-        orchestrate_commit(&cli, &message);
+        orchestrate_commit(&cli, message);
         return;
     }
 
@@ -71,7 +71,6 @@ fn main() {
         }
         _ => {
             println!("Exiting");
-            return;
         }
     }
 }

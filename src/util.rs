@@ -5,15 +5,15 @@ use std::process::Command;
 pub fn orchestrate_commit(cli: &Cli, message: &str) {
     if cli.add {
         println!("Running git add -A");
-        run(&cli, "git", &["add", "-A"]);
+        run(cli, "git", &["add", "-A"]);
     }
 
     println!("Running git commit -m \"{}\"", message);
-    run(&cli, "git", &["commit", "-m", message]);
+    run(cli, "git", &["commit", "-m", message]);
 
     if cli.push {
         println!("Running git push");
-        run(&cli, "git", &["push"]);
+        run(cli, "git", &["push"]);
     }
 
     println!("Done 🎉");
