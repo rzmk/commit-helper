@@ -62,7 +62,8 @@ fn main() {
 
     // Confirm the commit message
     let confirm =
-        Confirm::new(format!("Result:\n\n{}\n\nCommit? (y/n):", result_message).as_str()).prompt();
+        Confirm::new(format!("Result:\n\n{}\n\nRun commands? (y/n):", result_message).as_str())
+            .prompt();
 
     // If confirmed, run the commands in succession
     match confirm {

@@ -8,5 +8,6 @@ name = "ch"
 path = "src/main.rs"
 
 [dependencies]
+arboard = "3.4.1"
 clap = { version = "4.4.12", features = ["derive"] }
 inquire = { version = "0.6.2" }

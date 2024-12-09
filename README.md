@@ -52,6 +52,14 @@ If you want to pass in a custom commit message (therefore skipping the interacti
 ch -m "feat: add new feature"
 ```
 
+### `--clipboard` or `-c`
+
+If you want to copy the commit message to your clipboard **and skip committing and pushing**:
+
+```bash
+ch -c
+```
+
 ### `--debug` or `-d`
 
 If you want to see the debug output, use the `--debug` or `-d` flag:

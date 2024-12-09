@@ -1,4 +1,5 @@
 use super::parser::Cli;
+use arboard::Clipboard;
 use std::process::Command;
 
 // Run the commands in succession
@@ -8,12 +9,25 @@ pub fn orchestrate_commit(cli: &Cli, message: &str) {
         run(cli, "git", &["add", "-A"]);
     }
 
-    println!("Running git commit -m \"{}\"", message);
-    run(cli, "git", &["commit", "-m", message]);
+    if cli.clipboard {
+        println!("Copying commit message to clipboard");
+        if !cli.dry_run {
+            let mut clipboard = Clipboard::new().unwrap();
+            clipboard.set_text(message).unwrap();
+        }
+    } else {
+        println!("Running git commit -m \"{}\"", message);
+        let args = if cli.sign {
+            vec!["commit", "-m", message]
+        } else {
+            vec!["commit", "-S", "-m", message]
+        };
+        run(cli, "git", &args);
 
-    if cli.push {
-        println!("Running git push");
-        run(cli, "git", &["push"]);
+        if cli.push {
+            println!("Running git push");
+            run(cli, "git", &["push"]);
+        }
     }
 
     println!("Done 🎉");

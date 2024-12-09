@@ -11,9 +11,17 @@ pub struct Cli {
     #[arg(short = 'a', long = "add")]
     pub add: bool,
 
+    /// Copy commit message to clipboard instead of committing
+    #[arg(short = 'c', long = "clipboard")]
+    pub clipboard: bool,
+
     /// Run `git push` after committing
     #[arg(short = 'p', long = "push")]
     pub push: bool,
+
+    /// Add the `-S` flag when running `git commit` for signing
+    #[arg(short = 's', long = "sign")]
+    pub sign: bool,
 
     /// Run in debug mode (print output of each command)
     #[arg(short = 'd', long = "debug")]
