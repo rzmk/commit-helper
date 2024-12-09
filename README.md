@@ -78,6 +78,14 @@ If you want to do a dry run without executing any commands, use the `--dry-run` 
 ch --dry-run
 ```
 
+### `--sign` or `-s`
+
+If you want to run the `-S` flag when using `git commit`:
+
+```bash
+ch -s
+```
+
 ## Example
 
 If I want to run `git add -A`, then `git commit -m "feat: add new feature"`, then `git push` all in one go, I could run the following command:
