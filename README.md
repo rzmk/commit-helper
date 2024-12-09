@@ -101,9 +101,3 @@ ch -apm "feat: add new feature"
 ```
 
 > Note: The order of the combined short flags does not matter, except for the `-m` flag, which must be the last flag if you want to pass in a custom commit message after a combination of flags.
-
-## Tech Stack
-
--   [Rust](https://www.rust-lang.org/)
--   [clap](https://github.com/clap-rs/clap)
--   [inquire](https://github.com/mikaelmello/inquire)
